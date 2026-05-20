@@ -50,9 +50,26 @@ const navLinks = [
       <LangSwitch />
       <a
         href="mailto:contactomanuelgutierrez@gmail.com"
-        class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-5 text-sm font-medium text-white transition-colors hover:bg-primary-active"
+        aria-label={t('hero.cta.contact')}
+        class="inline-flex h-10 w-10 items-center justify-center rounded-md bg-primary text-sm font-medium text-white transition-colors hover:bg-primary-active sm:w-auto sm:px-5"
       >
-        {t('hero.cta.contact')}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="sm:hidden"
+          aria-hidden="true"
+        >
+          <rect width="20" height="16" x="2" y="4" rx="2" />
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </svg>
+        <span class="hidden sm:inline">{t('hero.cta.contact')}</span>
       </a>
 
       <details class="group/menu relative md:hidden">
