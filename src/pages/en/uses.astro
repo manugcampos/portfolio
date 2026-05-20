@@ -1,0 +1,22 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import UsesList from '@/components/UsesList.astro';
+import { getLangFromUrl, useTranslations, localizedPath } from '@/i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<BaseLayout title={`${t('uses.title')} · Manuel Campos`} description={t('uses.subtitle')}>
+  <section class="flex flex-col gap-5 pt-12 sm:pt-20" data-reveal>
+    <a href={localizedPath('/', lang)} class="text-sm font-medium text-primary underline-offset-4 hover:underline">
+      {t('uses.back')}
+    </a>
+    <h1 class="display-xl text-ink">{t('uses.title')}</h1>
+    <p class="max-w-2xl text-lg text-body">{t('uses.subtitle')}</p>
+  </section>
+
+  <div class="mt-16">
+    <UsesList />
+  </div>
+</BaseLayout>

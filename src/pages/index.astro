@@ -1,0 +1,23 @@
+---
+// On-demand rendered: this single route runs as a function so it can read
+// the request's cookies and Accept-Language header. Other pages stay static.
+export const prerender = false;
+
+import { ui, defaultLang, type Lang } from '@/i18n/ui';
+
+// 1. Manual choice wins — cookie set by the language switcher (LangSwitch).
+const saved = Astro.cookies.get('pref-lang')?.value;
+
+// 2. Otherwise match the browser's Accept-Language header against our locales.
+const preferred = Astro.preferredLocale;
+
+const target: Lang =
+  saved && saved in ui
+    ? (saved as Lang)
+    : preferred && preferred in ui
+      ? (preferred as Lang)
+      : defaultLang;
+
+// 302: temporary, so the browser keeps re-evaluating on future visits.
+return Astro.redirect(`/${target}/`, 302);
+---

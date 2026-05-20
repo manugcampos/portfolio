@@ -1,0 +1,51 @@
+---
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+import SocialLinks from '@/components/SocialLinks.astro';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+---
+
+<!-- Pre-footer coral CTA band -->
+<section class="mx-auto w-full max-w-[1200px] px-6 pb-24 sm:px-8">
+  <div class="rounded-xl bg-primary px-8 py-16 sm:px-16 sm:py-20">
+    <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+      <h2 class="display-md max-w-xl text-white">
+        {lang === 'es' ? '¿Construimos algo juntos?' : 'Let\'s build something together.'}
+      </h2>
+      <a
+        href="mailto:contactomanuelgutierrez@gmail.com"
+        class="inline-flex h-11 shrink-0 items-center justify-center rounded-md bg-canvas px-6 text-sm font-medium text-ink transition-colors hover:bg-surface-card"
+      >
+        {t('hero.cta.contact')}
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-surface-dark text-on-dark-soft">
+  <div class="mx-auto w-full max-w-[1200px] px-6 py-16 sm:px-8">
+    <div class="flex flex-col gap-10">
+      <div class="flex items-center gap-2 text-on-dark">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 0 L13.5 10.5 L24 12 L13.5 13.5 L12 24 L10.5 13.5 L0 12 L10.5 10.5 Z" />
+        </svg>
+        <span class="text-[15px] font-medium tracking-tight">Manuel Campos</span>
+      </div>
+
+      <div class="flex flex-col gap-6 border-t border-on-dark-soft/20 pt-8 sm:flex-row sm:items-center sm:justify-between">
+        <p class="text-sm">
+          &copy; {year} Manuel Campos. {t('footer.rights')}
+        </p>
+        <div class="flex items-center gap-6">
+          <SocialLinks compact />
+          <span class="hidden text-xs sm:inline">
+            {t('footer.builtWith')}
+            <a href="https://astro.build" class="text-on-dark underline-offset-4 hover:underline">Astro</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

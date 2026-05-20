@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+import JobItem from '@/components/JobItem.astro';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const jobs = (await getCollection('jobs')).sort((a, b) => a.data.order - b.data.order);
+const visibleJobs = jobs.slice(0, 2);
+const hiddenJobs = jobs.slice(2);
+---
+
+<section id="experience" class="scroll-mt-24 pt-24" data-reveal>
+  <h2 class="display-lg mb-10 text-ink">{t('experience.title')}</h2>
+
+  <ol class="flex flex-col gap-4">
+    {visibleJobs.map((job) => <JobItem job={job} />)}
+  </ol>
+
+  {
+    hiddenJobs.length > 0 && (
+      <details class="group mt-4">
+        <summary class="inline-flex cursor-pointer list-none items-center gap-2 rounded-md border border-hairline bg-canvas px-4 py-2 text-sm font-medium text-ink transition-colors hover:bg-surface-card [&::-webkit-details-marker]:hidden">
+          <span class="group-open:hidden">{t('experience.showMore')}</span>
+          <span class="hidden group-open:inline">{t('experience.showLess')}</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="transition-transform group-open:rotate-180"
+            aria-hidden="true"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </summary>
+        <ol class="mt-4 flex flex-col gap-4">
+          {hiddenJobs.map((job) => <JobItem job={job} />)}
+        </ol>
+      </details>
+    )
+  }
+</section>

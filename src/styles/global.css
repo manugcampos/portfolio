@@ -1,0 +1,134 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* DESIGN.md font substitutes:
+   - Copernicus / Tiempos Headline → EB Garamond (serif display)
+   - StyreneB → Inter (humanist sans body)
+   - JetBrains Mono → code */
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/eb-garamond";
+@import "@fontsource-variable/jetbrains-mono";
+
+@theme inline {
+    /* Font stacks */
+    --font-display: 'EB Garamond Variable', 'Tiempos Headline', 'Garamond', 'Times New Roman', serif;
+    --font-sans: 'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+    --font-heading: var(--font-display);
+
+    /* Brand colors — DESIGN.md trinity */
+    --color-primary: #cc785c;
+    --color-primary-active: #a9583e;
+    --color-primary-disabled: #e6dfd8;
+    --color-primary-foreground: #ffffff;
+
+    --color-ink: #141413;
+    --color-body-strong: #252523;
+    --color-body: #3d3d3a;
+    --color-muted: #6c6a64;
+    --color-muted-soft: #8e8b82;
+
+    --color-hairline: #e6dfd8;
+    --color-hairline-soft: #ebe6df;
+
+    --color-canvas: #faf9f5;
+    --color-surface-soft: #f5f0e8;
+    --color-surface-card: #efe9de;
+    --color-surface-cream-strong: #e8e0d2;
+
+    --color-surface-dark: #181715;
+    --color-surface-dark-elevated: #252320;
+    --color-surface-dark-soft: #1f1e1b;
+    --color-on-dark: #faf9f5;
+    --color-on-dark-soft: #a09d96;
+
+    --color-accent-teal: #5db8a6;
+    --color-accent-amber: #e8a55a;
+    --color-success: #5db872;
+    --color-warning: #d4a017;
+    --color-error: #c64545;
+
+    /* shadcn token aliases mapped to brand */
+    --color-background: var(--color-canvas);
+    --color-foreground: var(--color-ink);
+    --color-card: var(--color-surface-card);
+    --color-card-foreground: var(--color-ink);
+    --color-popover: var(--color-canvas);
+    --color-popover-foreground: var(--color-ink);
+    --color-secondary: var(--color-surface-card);
+    --color-secondary-foreground: var(--color-ink);
+    --color-muted-foreground: var(--color-muted);
+    --color-accent: var(--color-surface-card);
+    --color-accent-foreground: var(--color-ink);
+    --color-destructive: var(--color-error);
+    --color-border: var(--color-hairline);
+    --color-input: var(--color-hairline);
+    --color-ring: var(--color-primary);
+
+    /* Radii — DESIGN.md scale */
+    --radius-xs: 4px;
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-pill: 9999px;
+    --radius: 8px;
+    --radius-2xl: 20px;
+    --radius-3xl: 24px;
+    --radius-4xl: 32px;
+
+    /* Spacing tokens */
+    --spacing-section: 96px;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-hairline);
+  }
+  html {
+    font-family: var(--font-sans);
+    color-scheme: light;
+    background-color: var(--color-canvas);
+  }
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: 'ss01', 'cv01';
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    color: var(--color-ink);
+  }
+  /* Consistent keyboard-focus ring for plain interactive elements.
+     shadcn components keep their own ring via utilities (higher layer). */
+  a:focus-visible,
+  summary:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+  /* Display sizes — negative letter-spacing is non-negotiable */
+  .display-xl { font-family: var(--font-display); font-weight: 400; font-size: 64px; line-height: 1.05; letter-spacing: -1.5px; }
+  .display-lg { font-family: var(--font-display); font-weight: 400; font-size: 48px; line-height: 1.10; letter-spacing: -1px; }
+  .display-md { font-family: var(--font-display); font-weight: 400; font-size: 36px; line-height: 1.15; letter-spacing: -0.5px; }
+  .display-sm { font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.20; letter-spacing: -0.3px; }
+
+  .caption-uppercase {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+}
+
+/* Mobile clamp for hero display-xl */
+@media (max-width: 768px) {
+  .display-xl { font-size: 40px; letter-spacing: -1px; }
+  .display-lg { font-size: 36px; letter-spacing: -0.5px; }
+  .display-md { font-size: 28px; letter-spacing: -0.3px; }
+}

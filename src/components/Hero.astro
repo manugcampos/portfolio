@@ -1,0 +1,55 @@
+---
+import { Image } from 'astro:assets';
+import { getLangFromUrl, useTranslations, localizedPath } from '@/i18n/utils';
+import avatar from '@/assets/avatar.webp';
+import SocialLinks from '@/components/SocialLinks.astro';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<section class="grid grid-cols-1 gap-12 pt-12 sm:pt-20 md:grid-cols-12 md:gap-8" data-reveal>
+  <div class="flex flex-col gap-6 md:col-span-7">
+    <p class="caption-uppercase text-primary">{t('hero.tagline')}</p>
+    <h1 class="display-xl text-ink" style="view-transition-name: name;">
+      Manuel Gutierrez Campos
+    </h1>
+    <p class="max-w-xl text-lg leading-relaxed text-body">
+      {t('hero.intro')}
+    </p>
+
+    <div class="flex flex-wrap items-center gap-3 pt-2">
+      <a
+        href={localizedPath('/#projects', lang)}
+        class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-5 text-sm font-medium text-white transition-colors hover:bg-primary-active"
+      >
+        {t('hero.cta.projects')}
+      </a>
+      <a
+        href="mailto:contactomanuelgutierrez@gmail.com"
+        class="inline-flex h-10 items-center justify-center rounded-md border border-hairline bg-canvas px-5 text-sm font-medium text-ink transition-colors hover:bg-surface-card"
+      >
+        {t('hero.cta.contact')}
+      </a>
+    </div>
+
+    <div class="pt-4">
+      <SocialLinks />
+    </div>
+  </div>
+
+  <div class="flex justify-center md:col-span-5 md:justify-end md:pt-2">
+    <Image
+      src={avatar}
+      alt="Manuel Gutierrez Campos"
+      width={800}
+      height={800}
+      widths={[360, 540, 720]}
+      sizes="(min-width: 768px) 360px, 100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="aspect-square w-full max-w-[360px] rounded-2xl object-cover"
+      style="view-transition-name: avatar;"
+    />
+  </div>
+</section>

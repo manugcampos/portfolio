@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const items = (await getCollection('education')).sort((a, b) => a.data.order - b.data.order);
+
+function formatYear(start: string, end?: string) {
+  const y1 = start.split('-')[0];
+  const y2 = end ? end.split('-')[0] : t('experience.present');
+  return `${y1} — ${y2}`;
+}
+---
+
+<section id="education" class="scroll-mt-24 pt-24" data-reveal>
+  <h2 class="display-lg mb-10 text-ink">{t('education.title')}</h2>
+  <ul class="flex flex-col divide-y divide-hairline border-y border-hairline">
+    {
+      items.map((item) => {
+        const degree = lang === 'es' ? item.data.degree_es : item.data.degree_en;
+        const note = lang === 'es' ? item.data.note_es : item.data.note_en;
+        const institution =
+          lang === 'en' && item.data.institution_en
+            ? item.data.institution_en
+            : item.data.institution;
+        return (
+          <li class="flex flex-col gap-2 py-6 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+            <div>
+              <p class="text-lg font-medium text-ink">{degree}</p>
+              <p class="text-base text-body">
+                {institution}
+                {item.data.location && <span class="text-muted"> · {item.data.location}</span>}
+              </p>
+              {note && <p class="mt-2 max-w-xl text-sm leading-relaxed text-muted">{note}</p>}
+            </div>
+            <p class="caption-uppercase text-muted">{formatYear(item.data.start, item.data.end)}</p>
+          </li>
+        );
+      })
+    }
+  </ul>
+</section>

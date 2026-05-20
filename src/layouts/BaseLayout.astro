@@ -1,0 +1,130 @@
+---
+import '@/styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+import { ui, type Lang } from '@/i18n/ui';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  noIndex?: boolean;
+}
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const { title, description, noIndex = false } = Astro.props;
+const pageTitle = title ?? t('site.title');
+const pageDescription = description ?? t('site.description');
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const ogImage = new URL('/og-image.png', Astro.site).toString();
+
+const altLocales = (Object.keys(ui) as Lang[]).filter((l) => l !== lang);
+---
+
+<!doctype html>
+<html lang={lang} class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    {noIndex && <meta name="robots" content="noindex,nofollow" />}
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
+
+    {
+      altLocales.map((altLang) => (
+        <link
+          rel="alternate"
+          hreflang={altLang}
+          href={new URL(Astro.url.pathname.replace(`/${lang}`, `/${altLang}`), Astro.site).toString()}
+        />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={new URL(`/${lang}/`, Astro.site).toString()} />
+
+    <meta name="theme-color" content="#faf9f5" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={pageTitle} />
+    <meta property="og:site_name" content="Manuel Campos" />
+    <meta property="og:locale" content={lang === 'es' ? 'es_ES' : 'en_US'} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={pageTitle} />
+
+    <noscript>
+      <style>
+        [data-reveal] { opacity: 1 !important; transform: none !important; }
+      </style>
+    </noscript>
+
+    <ClientRouter />
+  </head>
+  <body class="min-h-screen bg-canvas font-sans text-ink antialiased">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-canvas focus:px-3 focus:py-2 focus:text-sm focus:shadow-md"
+    >
+      Skip to content
+    </a>
+    <Header />
+    <main id="main" class="mx-auto w-full max-w-[1200px] px-6 pb-24 pt-8 sm:px-8 sm:pt-16">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      const onPageLoad = () => {
+        const reveal = document.querySelectorAll<HTMLElement>('[data-reveal]');
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('reveal-in');
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -10% 0px', threshold: 0.05 }
+        );
+        reveal.forEach((el) => io.observe(el));
+      };
+      onPageLoad();
+      document.addEventListener('astro:page-load', onPageLoad);
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(0.75rem);
+    transition: opacity 600ms ease, transform 600ms ease;
+  }
+  [data-reveal].reveal-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>

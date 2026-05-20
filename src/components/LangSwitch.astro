@@ -1,0 +1,40 @@
+---
+import { languages, type Lang } from '@/i18n/ui';
+import { getLangFromUrl, switchLangPath, useTranslations } from '@/i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const others = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
+---
+
+<div class="flex items-center gap-1 text-xs font-medium">
+  <span class="text-muted" aria-hidden="true">{lang.toUpperCase()}</span>
+  {
+    others.map((l) => (
+      <a
+        href={switchLangPath(Astro.url.pathname, l)}
+        data-set-lang={l}
+        class="rounded-md px-2 py-1 text-muted transition-colors hover:bg-surface-card hover:text-ink"
+        aria-label={`${t('lang.switch')}: ${languages[l]}`}
+      >
+        {l.toUpperCase()}
+      </a>
+    ))
+  }
+</div>
+
+<script>
+  // Remember the visitor's manual language choice in a cookie so the root
+  // route (/) can honour it instead of re-detecting Accept-Language.
+  function bindLangCookie() {
+    document.querySelectorAll<HTMLAnchorElement>('a[data-set-lang]').forEach((a) => {
+      if (a.dataset.langBound) return;
+      a.dataset.langBound = '1';
+      a.addEventListener('click', () => {
+        document.cookie = `pref-lang=${a.dataset.setLang}; path=/; max-age=31536000; samesite=lax`;
+      });
+    });
+  }
+  bindLangCookie();
+  document.addEventListener('astro:page-load', bindLangCookie);
+</script>

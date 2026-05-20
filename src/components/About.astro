@@ -1,0 +1,43 @@
+---
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const stackGroups = [
+  { label: 'Frontend', items: ['TypeScript', 'React', 'Next.js', 'Tailwind'] },
+  { label: 'Backend', items: ['Python', 'FastAPI', 'Node.js', 'PostgreSQL'] },
+  { label: 'DevOps', items: ['AWS', 'Google Cloud Run', 'Cloudflare', 'Docker'] },
+  { label: lang === 'es' ? 'IA' : 'AI', items: ['AI integration', 'LLM apps'] },
+];
+---
+
+<section id="about" class="scroll-mt-24 pt-24" data-reveal>
+  <h2 class="display-lg mb-8 max-w-3xl text-ink">{t('about.title')}</h2>
+  <div class="grid grid-cols-1 gap-12 md:grid-cols-12">
+    <div class="space-y-5 text-lg leading-relaxed text-body md:col-span-8">
+      {t('about.body').split('\n\n').map((paragraph) => <p>{paragraph}</p>)}
+    </div>
+    <aside class="md:col-span-4">
+      <div class="rounded-xl bg-surface-card p-5">
+        <p class="caption-uppercase mb-4 text-muted">{t('about.stack')}</p>
+        <div class="flex flex-col gap-3">
+          {stackGroups.map((group) => (
+            <div class="flex flex-col gap-1.5 sm:flex-row sm:gap-3">
+              <p class="shrink-0 pt-1 text-[11px] font-semibold uppercase tracking-wider text-muted sm:w-16">
+                {group.label}
+              </p>
+              <ul class="flex flex-wrap gap-1.5">
+                {group.items.map((tech) => (
+                  <li class="inline-flex items-center rounded-full bg-canvas px-2.5 py-0.5 text-[13px] font-medium text-ink">
+                    {tech}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>

@@ -1,0 +1,97 @@
+---
+import { getCollection } from 'astro:content';
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<section id="projects" class="scroll-mt-24 pt-24" data-reveal>
+  <h2 class="display-lg mb-10 text-ink">{t('projects.title')}</h2>
+
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+    {
+      projects.map((project, i) => {
+        const desc = lang === 'es' ? project.data.description_es : project.data.description_en;
+        const dark = i % 2 === 1;
+        return (
+          <article
+            class:list={[
+              'flex h-full flex-col gap-5 rounded-xl p-8',
+              dark
+                ? 'bg-surface-dark text-on-dark'
+                : 'bg-surface-card text-ink',
+            ]}
+          >
+            <div class="flex flex-col gap-3">
+              <div class="flex items-center gap-4">
+                {project.data.logo && (
+                  <div class="flex h-14 shrink-0 items-center rounded-xl bg-white px-3.5">
+                    <img
+                      src={project.data.logo}
+                      alt={project.data.title}
+                      loading="lazy"
+                      class="h-9 w-auto object-contain"
+                    />
+                  </div>
+                )}
+                <h3 class:list={['font-display text-2xl font-normal tracking-tight', dark ? 'text-on-dark' : 'text-ink']}>
+                  {project.data.title}
+                </h3>
+              </div>
+              <p class:list={['text-base leading-relaxed', dark ? 'text-on-dark-soft' : 'text-body']}>
+                {desc}
+              </p>
+            </div>
+
+            {project.data.stack.length > 0 && (
+              <ul class="mt-auto flex flex-wrap gap-2 pt-2">
+                {project.data.stack.map((tech) => (
+                  <li
+                    class:list={[
+                      'inline-flex items-center rounded-full px-3 py-1 text-[13px] font-medium',
+                      dark ? 'bg-surface-dark-elevated text-on-dark' : 'bg-canvas text-ink',
+                    ]}
+                  >
+                    {tech}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <div class="flex flex-wrap gap-4 pt-2 text-sm font-medium">
+              {project.data.repo && (
+                <a
+                  href={project.data.repo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class:list={[
+                    'underline-offset-4 hover:underline',
+                    dark ? 'text-on-dark' : 'text-primary',
+                  ]}
+                >
+                  {t('projects.repo')} ↗
+                </a>
+              )}
+              {project.data.demo && (
+                <a
+                  href={project.data.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class:list={[
+                    'underline-offset-4 hover:underline',
+                    dark ? 'text-on-dark' : 'text-primary',
+                  ]}
+                >
+                  {t('projects.demo')} ↗
+                </a>
+              )}
+            </div>
+          </article>
+        );
+      })
+    }
+  </div>
+</section>
