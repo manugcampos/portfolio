@@ -5,10 +5,10 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
 const stackGroups = [
-  { label: 'Frontend', items: ['TypeScript', 'React', 'Next.js', 'Tailwind'] },
-  { label: 'Backend', items: ['Python', 'FastAPI', 'Node.js', 'PostgreSQL'] },
-  { label: 'DevOps', items: ['AWS', 'Google Cloud Run', 'Cloudflare', 'Docker'] },
-  { label: lang === 'es' ? 'IA' : 'AI', items: ['AI integration', 'LLM apps'] },
+  { label: lang === 'es' ? 'IA' : 'AI', items: ['RAG', 'LLM apps', 'AI agents', 'Tool-calling'] },
+  { label: 'Frontend', items: ['React', 'Next.js', 'React Native', 'Expo', 'Tailwind', 'Zustand'] },
+  { label: 'Backend', items: ['TypeScript', 'Python', 'FastAPI', 'Node.js', 'PostgreSQL', 'Drizzle'] },
+  { label: 'DevOps', items: ['AWS', 'Google Cloud Run', 'Cloudflare', 'Docker', 'CI/CD', 'GitHub Actions'] },
 ];
 ---
 

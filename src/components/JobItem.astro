@@ -1,5 +1,5 @@
 ---
-import { render, type CollectionEntry } from 'astro:content';
+import { type CollectionEntry } from 'astro:content';
 import { getLangFromUrl, useTranslations } from '@/i18n/utils';
 
 interface Props {
@@ -12,7 +12,8 @@ const t = useTranslations(lang);
 
 const role = lang === 'es' ? job.data.role_es : job.data.role_en;
 const summary = lang === 'es' ? job.data.summary_es : job.data.summary_en;
-const { Content } = await render(job);
+const location = lang === 'es' ? job.data.location_es : job.data.location_en;
+const highlights = lang === 'es' ? job.data.highlights_es : job.data.highlights_en;
 
 function formatRange(start: string, end: string | undefined, presentLabel: string) {
   const fmt = (iso: string) => {
@@ -51,13 +52,15 @@ function formatRange(start: string, end: string | undefined, presentLabel: strin
         {formatRange(job.data.start, job.data.end, t('experience.present'))}
       </p>
     </div>
-    {job.data.location && <p class="text-sm text-muted">{job.data.location}</p>}
+    {location && <p class="text-sm text-muted">{location}</p>}
     <p class="text-base leading-relaxed text-body">{summary}</p>
     {
-      job.body && job.body.trim().length > 0 && (
-        <div class="text-base leading-relaxed text-body [&_ul]:mt-2 [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mt-1">
-          <Content />
-        </div>
+      highlights.length > 0 && (
+        <ul class="mt-2 list-disc pl-5 text-base leading-relaxed text-body">
+          {highlights.map((item) => (
+            <li class="mt-1">{item}</li>
+          ))}
+        </ul>
       )
     }
     {
